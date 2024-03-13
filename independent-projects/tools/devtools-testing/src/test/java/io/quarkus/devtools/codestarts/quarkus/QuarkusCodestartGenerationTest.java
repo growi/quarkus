@@ -4,8 +4,7 @@ import static io.quarkus.devtools.codestarts.quarkus.QuarkusCodestartData.Quarku
 import static io.quarkus.devtools.codestarts.quarkus.QuarkusCodestartData.QuarkusDataKey.RESTEASY_CODESTART_RESOURCE_CLASS_NAME;
 import static io.quarkus.devtools.codestarts.quarkus.QuarkusCodestartData.QuarkusDataKey.RESTEASY_CODESTART_RESOURCE_PATH;
 import static io.quarkus.devtools.testing.FakeExtensionCatalog.FAKE_QUARKUS_CODESTART_CATALOG;
-import static io.quarkus.devtools.testing.SnapshotTesting.assertThatMatchSnapshot;
-import static io.quarkus.devtools.testing.SnapshotTesting.checkContains;
+import static io.quarkus.devtools.testing.SnapshotTesting.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
@@ -317,6 +316,7 @@ class QuarkusCodestartGenerationTest {
                 .satisfies(checkContains("docker build -f src/main/docker/Dockerfile.jvm"))
                 .satisfies(checkContains("registry.access.redhat.com/ubi8/openjdk-17:1.18"))
                 .satisfies(checkContains("ENV JAVA_APP_JAR=\"/deployments/quarkus-run.jar\""))
+                .satisfies(checkNotContains("ENV JAVA_OPTS="))
                 .satisfies(checkContains("ENTRYPOINT [ \"/opt/jboss/container/java/run/run-java.sh\" ]"));
         assertThat(projectDir.resolve("src/main/docker/Dockerfile.legacy-jar")).exists()
                 .satisfies(checkContains("./mvnw package -Dquarkus.package.type=legacy-jar"))
@@ -325,6 +325,7 @@ class QuarkusCodestartGenerationTest {
                 .satisfies(checkContains("EXPOSE 8080"))
                 .satisfies(checkContains("USER 185"))
                 .satisfies(checkContains("ENV JAVA_APP_JAR=\"/deployments/quarkus-run.jar\""))
+                .satisfies(checkNotContains("ENV JAVA_OPTS="))
                 .satisfies(checkContains("ENTRYPOINT [ \"/opt/jboss/container/java/run/run-java.sh\" ]"));
         assertThat(projectDir.resolve("src/main/docker/Dockerfile.native-micro")).exists()
                 .satisfies(checkContains("./mvnw package -Dnative"))
@@ -343,6 +344,7 @@ class QuarkusCodestartGenerationTest {
                 .satisfies(checkContains("docker build -f src/main/docker/Dockerfile.jvm"))
                 .satisfies(checkContains("registry.access.redhat.com/ubi8/openjdk-17:1.18"))
                 .satisfies(checkContains("ENV JAVA_APP_JAR=\"/deployments/quarkus-run.jar\""))
+                .satisfies(checkNotContains("ENV JAVA_OPTS="))
                 .satisfies(checkContains("ENTRYPOINT [ \"/opt/jboss/container/java/run/run-java.sh\" ]"));
         assertThat(projectDir.resolve("src/main/docker/Dockerfile.legacy-jar")).exists()
                 .satisfies(checkContains("./gradlew build -Dquarkus.package.type=legacy-jar"))
